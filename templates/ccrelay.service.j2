@@ -1,0 +1,14 @@
+[Unit]
+Description=carbon-c-relay
+After=network.target
+Requires=network.target
+
+[Service]
+ExecStart={{ binary_destination }}/ccrelay -D -l /var/log/ccrelay/ccrelay.log -p 2000 -p /var/run/ccrelay.lock -f {{ binary_destination }}/ccrelay.conf
+Restart=always
+RestartSec=5
+TimeoutSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

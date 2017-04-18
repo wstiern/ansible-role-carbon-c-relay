@@ -1,0 +1,5 @@
+- name: reload systemd
+  command: systemd daemon-reload
+
+- name: restart carbon-c-relay
+  service: name=ccrelay state=restarted

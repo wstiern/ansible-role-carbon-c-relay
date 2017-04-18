@@ -1,0 +1,33 @@
+{% for server, config in carbon_servers.items() %}
+
+cluster {{ config.cluster }}
+	any_of
+	{{ hostvars[server]['ec2_private_ip_address'] }}:{{ config.port }}
+	;
+
+{% endfor %}
+
+# whitelist
+match
+	/good_string_with_bad_string_inside/
+{% for server, config in carbon_servers.items() %}
+	send to {{ config.cluster }}
+{% endfor %}
+	stop
+	;
+
+# blacklist
+match
+	/bad_string/
+	send to blackhole
+	stop
+	;
+
+# down the hatch
+match
+	*
+{% for server, config in carbon_servers.items() %}
+	send to {{ config.cluster }}
+{% endfor %}
+	stop
+	;

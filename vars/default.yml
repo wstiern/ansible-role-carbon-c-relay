@@ -1,0 +1,11 @@
+ccrelay_version: 3.0
+
+binary_destination: /usr/local/bin
+
+prerequisites:
+  - gcc
+
+carbon_servers:
+  graphite01:
+    cluster: a
+    port: 2000
