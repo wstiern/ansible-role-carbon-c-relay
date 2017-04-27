@@ -38,7 +38,7 @@
   when: ccrelay_build.changed
   
 - name: drop configs
-  template: dest={{ binary_destination }}/{{ item }} src={{ item }}.j2
+  template: dest=/usr/local/etc/{{ item }} src={{ item }}.j2
   with_items:
     - ccrelay.conf
   notify:
@@ -52,7 +52,7 @@
     - restart carbon-c-relay
   when:
     - (ansible_distribution == "CentOS") or (ansible_distribution == "RedHat")
-    - "{{ ansible_distribution_version|int }} == 7"
+    - ansible_distribution_major_version == "7"
 
 - name: drop sysv init script
   template: src={{ item }}.j2 dest=/{{ item }} mode=0755
@@ -60,7 +60,7 @@
     - restart carbon-c-relay
   when:
     - (ansible_distribution == "CentOS") or (ansible_distribution == "RedHat")
-    - "{{ ansible_distribution_version|int }} == 6"
+    - ansible_distribution_major_version == "6"
   with_items:
     - etc/init.d/ccrelay
 
@@ -75,4 +75,3 @@
   file: path=/var/log/ccrelay/ state=directory owner=root group=root mode=0744
   when:
     - (ansible_distribution == "CentOS") or (ansible_distribution == "RedHat")
-    - "{{ ansible_distribution_version|int }} == 6"
